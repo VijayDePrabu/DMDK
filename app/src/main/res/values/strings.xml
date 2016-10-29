@@ -1,3 +1,38 @@
 <resources>
-    <string name="app_name">DMDK</string>
+    <string name="app_name">DMDK MIS</string>
+    <string name="back">Back</string>
+    <string name="print">Print</string>
+    <string name="clear_form">Clear form</string>
+    <string name="options">Options</string>
+    <string name="about">About app</string>
+
+    <string name="fillup_header">Enter Member details</string>
+
+    <!-- IDCard Form Labels and Fields -->
+    <string name="name">Name</string>
+    <string name="age">Age</string>
+    <string name="gender">Gender</string>
+    <string name="husband_name">Father/Husband\'s Name</string>
+    <string name="voter_id">Voter Id</string>
+    <string name="ward">Ward</string>
+    <string name="panchayat">Panchayat</string>
+    <string name="town_city">Town/City</string>
+    <string name="district">District</string>
+    <string name="membership_id">Id</string>
+    <string name="date">Date of Joining</string>
+    <string name="general_secretary">General Secretary</string>
+
+    <string name="phone">Phone</string>
+    <string name="dob">D.O.B</string>
+    <string name="mla">MLA</string>
+    <string name="mp">MP</string>
+
+    <string name="close_app_msg">Close application?!</string>
+
+    <!--Screen titles -->
+    <string name="admin_login">Admin</string>
+    <string name="admin_registeration">Admin Registeration</string>
+    <string name="new_membership_entry">New Membersip Entry</string>
+
+
 </resources>

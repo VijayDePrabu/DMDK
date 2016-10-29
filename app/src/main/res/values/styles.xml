@@ -13,4 +13,7 @@
         <item name="android:windowBackground">@drawable/splash_screen</item>
     </style>
 
+    <style name="DialogTheme" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="android:background">#FFFFD919</item>
+    </style>
 </resources>

@@ -1,0 +1,377 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/app_bg"
+    >
+
+    <RelativeLayout
+        android:id="@+id/few"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+        <RelativeLayout
+            android:id="@+id/idCardLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:paddingBottom="@dimen/activity_vertical_margin"
+            android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:paddingRight="@dimen/activity_horizontal_margin"
+            android:paddingTop="@dimen/activity_vertical_margin"
+            tools:context=".MembershipEntryActivity"
+            tools:ignore="MissingPrefix">
+            <LinearLayout
+                android:id="@+id/linearLayout_focus"
+                android:layout_width="0px"
+                android:layout_height="0px"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:orientation="vertical" />
+            <TextView
+                android:id="@+id/textVHeader"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_alignParentTop="true"
+                android:textAllCaps="true"
+                android:textStyle="bold"
+                android:textSize="16dp"
+                android:textColor="@color/colorEntryTextHead"
+                android:paddingBottom="12dp"
+                android:text="@string/fillup_header" />
+            <ImageView
+                android:id="@+id/imageVPhoto"
+                android:layout_width="120dp"
+                android:layout_height="100dp"
+                android:layout_below="@id/textVHeader"
+                android:src="@android:drawable/ic_menu_camera"
+                android:layout_centerHorizontal="true"
+                />
+
+            <TextView
+                android:id="@+id/textVPhone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/imageVPhoto"
+                android:layout_marginRight="@dimen/idcard_field_horizontal_margin"
+                android:layout_marginTop="@dimen/idcard_field_vertical_margin"
+                android:textColor="@color/colorEntryText"
+                android:text="@string/phone" />
+
+            <EditText
+                android:id="@+id/editTPhone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBaseline="@id/textVPhone"
+                android:layout_marginRight="@dimen/idcard_field_horizontal_margin"
+                android:layout_toRightOf="@id/textVPhone"
+                android:ems="7"
+                android:inputType="phone" />
+
+            <TextView
+                android:id="@+id/textVDOB"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/textVPhone"
+                android:layout_marginRight="@dimen/idcard_field_horizontal_margin"
+                android:layout_marginTop="@dimen/idcard_field_vertical_margin"
+                android:textColor="@color/colorEntryText"
+                android:text="@string/dob" />
+
+            <EditText
+                android:id="@+id/editTDOB"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBaseline="@id/textVDOB"
+                android:layout_marginRight="@dimen/idcard_field_horizontal_margin"
+                android:layout_toRightOf="@id/textVDOB"
+                android:onClick="showStartDateDialog"
+                android:focusable="false"
+                android:ems="6"
+                android:inputType="phone" />
+            <TextView
+                android:id="@+id/textVMembershipId"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@id/textVDOB"
+                android:layout_below="@id/textVDOB"
+                android:layout_marginRight="@dimen/idcard_field_horizontal_margin"
+                android:layout_marginTop="@dimen/idcard_field_vertical_margin"
+                android:textColor="@color/colorEntryText"
+                android:text="@string/membership_id" />
+
+            <EditText
+                android:id="@+id/editTMembershipId"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBaseline="@id/textVMembershipId"
+                android:layout_below="@id/textVDOB"
+                android:layout_marginRight="@dimen/idcard_field_horizontal_margin"
+                android:layout_toRightOf="@id/textVMembershipId"
+                android:ems="4"
+                android:inputType="number"
+                android:maxLength="8" />
+
+            <TextView
+                android:id="@+id/textVName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/textVMembershipId"
+                android:layout_alignLeft="@id/textVMembershipId"
+                android:layout_marginRight="@dimen/idcard_field_horizontal_margin"
+                android:layout_marginTop="@dimen/idcard_field_vertical_margin"
+                android:textColor="@color/colorEntryText"
+                android:text="@string/name" />
+
+            <EditText
+                android:id="@+id/editTName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBaseline="@id/textVName"
+                android:layout_toRightOf="@id/textVName"
+                android:ems="20"
+                android:inputType="textPersonName"
+                android:text="" />
+
+
+
+            <TextView
+                android:id="@+id/textVGender"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@id/textVName"
+                android:layout_below="@id/textVName"
+                android:layout_marginRight="@dimen/idcard_field_horizontal_margin"
+                android:layout_marginTop="@dimen/idcard_field_vertical_margin"
+                android:textColor="@color/colorEntryText"
+                android:text="@string/gender" />
+
+            <Spinner
+                android:id="@+id/spinGender"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:layout_alignBaseline="@id/textVGender"
+                android:layout_marginRight="@dimen/idcard_field_horizontal_margin"
+                android:layout_toRightOf="@id/textVGender" />
+
+            <TextView
+                android:id="@+id/textVHusband"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@id/textVGender"
+                android:layout_below="@id/textVGender"
+                android:layout_marginRight="@dimen/idcard_field_horizontal_margin"
+                android:layout_marginTop="@dimen/idcard_field_vertical_margin"
+                android:textColor="@color/colorEntryText"
+                android:text="@string/husband_name" />
+
+            <EditText
+                android:id="@+id/editTHusband"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBaseline="@id/textVHusband"
+                android:layout_below="@id/spinGender"
+                android:layout_marginRight="@dimen/idcard_field_horizontal_margin"
+                android:layout_toRightOf="@id/textVHusband"
+                android:ems="20"
+                android:inputType="textPersonName" />
+
+            <TextView
+                android:id="@+id/textVVoterId"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@id/textVHusband"
+                android:layout_below="@id/textVHusband"
+                android:layout_marginRight="@dimen/idcard_field_horizontal_margin"
+                android:layout_marginTop="@dimen/idcard_field_vertical_margin"
+                android:textColor="@color/colorEntryText"
+                android:text="@string/voter_id" />
+
+            <EditText
+                android:id="@+id/editTVoterId"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBaseline="@id/textVVoterId"
+                android:layout_marginRight="@dimen/idcard_field_horizontal_margin"
+                android:layout_toRightOf="@id/textVVoterId"
+                android:ems="20"
+                android:inputType="number" />
+
+            <TextView
+                android:id="@+id/textVWard"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@id/textVVoterId"
+                android:layout_below="@id/textVVoterId"
+                android:layout_marginRight="@dimen/idcard_field_horizontal_margin"
+                android:layout_marginTop="@dimen/idcard_field_vertical_margin"
+                android:textColor="@color/colorEntryText"
+                android:text="@string/ward" />
+
+            <EditText
+                android:id="@+id/editTWard"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBaseline="@id/textVWard"
+                android:layout_marginRight="@dimen/idcard_field_horizontal_margin"
+                android:layout_toRightOf="@id/textVWard"
+                android:ems="20"
+                android:inputType="number" />
+
+            <TextView
+                android:id="@+id/textVPanchayat"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@id/textVWard"
+                android:layout_below="@id/textVWard"
+                android:layout_marginRight="@dimen/idcard_field_horizontal_margin"
+                android:layout_marginTop="@dimen/idcard_field_vertical_margin"
+                android:textColor="@color/colorEntryText"
+                android:text="@string/panchayat" />
+
+            <AutoCompleteTextView
+                android:id="@+id/autoCompleteTVPanchayat"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBaseline="@id/textVPanchayat"
+                android:layout_marginRight="@dimen/idcard_field_horizontal_margin"
+                android:textSize="12dp"
+                android:layout_toRightOf="@id/textVPanchayat"
+                android:ems="8" />
+
+            <TextView
+                android:id="@+id/textVTownCity"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@id/textVPanchayat"
+                android:layout_below="@id/textVPanchayat"
+                android:layout_marginRight="@dimen/idcard_field_horizontal_margin"
+                android:layout_marginTop="@dimen/idcard_field_vertical_margin"
+                android:textColor="@color/colorEntryText"
+                android:text="@string/town_city" />
+
+            <AutoCompleteTextView
+                android:id="@+id/autoCompleteTVTownCity"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBaseline="@id/textVTownCity"
+                android:layout_marginRight="@dimen/idcard_field_horizontal_margin"
+                android:textSize="12dp"
+                android:layout_toRightOf="@id/textVTownCity"
+                android:ems="8" />
+
+            <TextView
+                android:id="@+id/textVDistrict"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@id/textVTownCity"
+                android:layout_below="@id/textVTownCity"
+                android:layout_marginRight="@dimen/idcard_field_horizontal_margin"
+                android:layout_marginTop="@dimen/idcard_field_vertical_margin"
+                android:textColor="@color/colorEntryText"
+                android:text="@string/district" />
+
+            <AutoCompleteTextView
+                android:id="@+id/autoCompleteTVDistrict"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBaseline="@id/textVDistrict"
+                android:layout_alignLeft="@id/autoCompleteTVTownCity"
+                android:layout_marginRight="@dimen/idcard_field_horizontal_margin"
+                android:textSize="12dp"
+                android:layout_toRightOf="@id/textVDistrict"
+                android:ems="8" />
+
+
+
+            <TextView
+                android:id="@+id/textVdate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/idcard_field_horizontal_margin"
+                android:layout_marginTop="@dimen/idcard_field_vertical_margin"
+                android:layout_alignLeft="@id/textVDistrict"
+                android:layout_below="@id/textVDistrict"
+                android:textColor="@color/colorEntryText"
+                android:text="@string/date" />
+
+            <EditText
+                android:id="@+id/editTDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBaseline="@id/textVdate"
+                android:layout_below="@id/textVDistrict"
+                android:layout_marginRight="@dimen/idcard_field_horizontal_margin"
+                android:layout_toRightOf="@id/textVdate"
+                android:ems="5"
+                android:inputType="date" />
+
+
+
+
+
+
+
+
+            <TextView
+                android:id="@+id/textVMLA"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@id/textVdate"
+                android:layout_below="@id/textVdate"
+                android:layout_marginRight="@dimen/idcard_field_horizontal_margin"
+                android:layout_marginTop="@dimen/idcard_field_vertical_margin"
+                android:textColor="@color/colorEntryText"
+                android:text="@string/mla" />
+
+            <EditText
+                android:id="@+id/editTMLA"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBaseline="@id/textVMLA"
+                android:layout_below="@id/textVMembershipId"
+                android:layout_marginRight="@dimen/idcard_field_horizontal_margin"
+                android:layout_toRightOf="@id/textVMLA"
+                android:ems="4"
+                android:inputType="textPersonName"
+                />
+
+            <TextView
+                android:id="@+id/textVMP"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@id/textVMLA"
+                android:layout_below="@id/textVMLA"
+                android:layout_marginRight="@dimen/idcard_field_horizontal_margin"
+                android:layout_marginTop="@dimen/idcard_field_vertical_margin"
+                android:textColor="@color/colorEntryText"
+                android:text="@string/mp" />
+
+            <EditText
+                android:id="@+id/editTMP"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBaseline="@id/textVMP"
+                android:layout_marginRight="@dimen/idcard_field_horizontal_margin"
+                android:layout_toRightOf="@id/textVMP"
+                android:ems="5"
+                android:inputType="textPersonName" />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Preview"
+                android:backgroundTint="@color/colorBaggyGreen"
+                android:id="@+id/btnPreview"
+                android:layout_below="@+id/textVMP"
+                android:layout_marginTop="@dimen/idcard_field_vertical_margin"
+                android:layout_centerHorizontal="true" />
+
+
+        </RelativeLayout>
+    </RelativeLayout>
+</ScrollView>
