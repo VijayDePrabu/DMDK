@@ -1,0 +1,12 @@
+package com.de.dmdk;
+
+/**
+ * Created by MSF201Vijay on 15-10-2016.
+ */
+public class DMDKConstants {
+
+    public static String IDCARD_PDF_PATH="IDCARD_PDF_PATH";
+    public static int REQUEST_PICTURE=55;
+
+
+}

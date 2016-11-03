@@ -2,4 +2,15 @@
     <!-- Default screen margins, per the Android Design guidelines. -->
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
+
+    <dimen name="idcard_field_vertical_margin">20dp</dimen>
+    <dimen name="idcard_field_horizontal_margin">10dp</dimen>
+    <dimen name="logo_width">50dp</dimen>
+    <dimen name="logo_height">50dp</dimen>
+
+    <dimen name="outer_yellow_border_thick">6dp</dimen>
+    <dimen name="red_border_thick">3dp</dimen>
+    <dimen name="inner_yellow_border_thick">3dp</dimen>
+    <dimen name="black_border_thick">3dp</dimen>
+    <dimen name="screen_app_logo_size">96dp</dimen>
 </resources>

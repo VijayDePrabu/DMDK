@@ -2,19 +2,53 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.de.dmdk">
 
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.CAMERA" />
+
     <application
+        android:name=".DMDKApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MemberShipFormActivity">
+        <activity
+            android:name=".MembershipEntryActivity"
+            android:screenOrientation="portrait">
+
+        </activity>
+
+        <!--
+            <activity android:name="com.commonsware.cwac.cam2.CameraActivity"
+            android:theme="@android:style/Theme.Holo.Light"/>
+        -->
+
+
+        <!--
+     ATTENTION: This was auto-generated to add Google Play services to your project for
+     App Indexing.  See https://g.co/AppIndexing/AndroidStudio for more information.
+        -->
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
+
+        <activity android:name=".IDCardConfirmActivity" />
+        <activity
+            android:name=".login.LoginActivity"
+            android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".BaseActivity" />
+        <activity android:name=".login.NewAdminRegisterationActivity" />
+        <activity android:name=".MenuScreenActivity" />
+        <activity android:name=".membership.NewMembershipEntryActivity"></activity>
+        <activity android:name=".FirebaseTestActivity">
+   </activity>
+
     </application>
 
 </manifest>

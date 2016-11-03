@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item type="id" name="autoCompleteTVPanchayatPrint" />
+    <item type="id" name="autoCompleteTVTownCityPrint" />
+    <item type="id" name="autoCompleteTVDistrictPrint" />
+    <item type="id" name="editTDatingPrint" />
+    <item type="id" name="editTMembershipIdPrint" />
+
+
+</resources>

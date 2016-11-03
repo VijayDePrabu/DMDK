@@ -1,15 +1,16 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 23
-    buildToolsVersion "24.0.1"
+    compileSdkVersion 24
+    buildToolsVersion "23.0.1"
 
     defaultConfig {
         applicationId "com.de.dmdk"
         minSdkVersion 19
-        targetSdkVersion 23
+        targetSdkVersion 24
         versionCode 1
         versionName "1.0"
+        multiDexEnabled true
     }
     buildTypes {
         release {
@@ -17,10 +18,46 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    dexOptions {
+        javaMaxHeapSize "4g"
+    }
 }
+
+repositories {
+    maven {
+        url "https://s3.amazonaws.com/repo.commonsware.com"
+    }
+
+
+}
+dependencies
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     testCompile 'junit:junit:4.12'
-    compile 'com.android.support:appcompat-v7:23.4.0'
+    compile 'com.android.support:appcompat-v7:24.0.0'
+    compile 'com.google.android.gms:play-services:9.4.0'
+    compile 'com.google.firebase:firebase-core:9.4.0'
+    compile 'com.google.firebase:firebase-database:9.4.0'
+    compile 'com.pixplicity.easyprefs:library:1.8.1@aar'
+    compile 'com.android.support:design:24.0.0'
+
+    /* cameraactivity*/
+    compile 'com.commonsware.cwac:cam2:0.6.9'
+    /* font universal loading*/
+    compile 'uk.co.chrisjenx:calligraphy:2.2.0'
+    /* progressbar */
+    compile 'com.github.bhargavms:DotLoader:1.0.1'
+    /* Printer SDK*/
+    compile 'com.hp.mss:mobileprintsdk:v2.02.418'
+}
+apply plugin: 'com.google.gms.google-services'
+dependencies {
+    compile 'com.google.android.gms:play-services-ads:9.4.0'
+}
+dependencies {
+    compile 'com.google.android.gms:play-services-auth:9.4.0'
+}
+dependencies {
+    compile 'com.google.android.gms:play-services-gcm:9.4.0'
 }

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array
+        name="genderArray">
+        <item>Select Gender</item>
+        <item>ஆண்</item>
+        <item>பெண்</item>
+        <item>அருந்ததியர்</item>
+    </string-array>
+</resources>

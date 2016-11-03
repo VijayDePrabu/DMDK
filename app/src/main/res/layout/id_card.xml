@@ -1,0 +1,289 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/idCardLayout"
+    android:layout_width="332.16dp"
+    android:layout_height="472.32dp"
+    android:background="@drawable/id_card_border"
+    android:paddingBottom="8dp"
+    android:paddingLeft="32dp"
+    android:paddingRight="32dp">
+
+    <ImageView
+        android:id="@+id/imageVFlagIcon"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:src="@drawable/idcard_logo_flag" />
+
+    <ImageView
+        android:id="@+id/imageVSymbolIcon"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:src="@drawable/idcard_logo_symbol" />
+
+    <TextView
+        android:id="@+id/textVName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/imageVFlagIcon"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="10dp"
+        android:text="@string/name"
+        android:textColor="@color/colorFont"
+        android:textSize="12dp" />
+
+    <EditText
+        android:id="@+id/editTName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@id/textVName"
+        android:layout_toRightOf="@id/textVName"
+        android:ems="20"
+        android:inputType="textPersonName"
+        android:text="" />
+
+    <TextView
+        android:id="@+id/textVAge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@id/textVName"
+        android:layout_below="@id/textVName"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="18dp"
+        android:text="@string/age"
+        android:textColor="@color/colorFont"
+        android:textSize="12dp" />
+
+    <EditText
+        android:id="@+id/editTAge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@id/textVAge"
+        android:layout_marginRight="8dp"
+        android:layout_toRightOf="@id/textVAge"
+        android:ems="2"
+        android:inputType="number" />
+
+    <TextView
+        android:id="@+id/textVGender"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@id/editTAge"
+        android:layout_marginRight="8dp"
+        android:layout_toRightOf="@id/editTAge"
+        android:text="@string/gender"
+        android:textColor="@color/colorFont"
+        android:textSize="12dp" />
+
+    <Spinner
+        android:id="@+id/spinGender"
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:layout_alignBaseline="@id/editTAge"
+        android:layout_marginRight="8dp"
+        android:layout_toRightOf="@id/textVGender" />
+
+    <TextView
+        android:id="@+id/textVHusband"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@id/textVAge"
+        android:layout_below="@id/textVAge"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="18dp"
+        android:text="@string/husband_name"
+        android:textColor="@color/colorFont"
+        android:textSize="12dp" />
+
+    <EditText
+        android:id="@+id/editTHusband"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@id/textVHusband"
+        android:layout_below="@id/spinGender"
+        android:layout_marginRight="8dp"
+        android:layout_toRightOf="@id/textVHusband"
+        android:ems="20"
+        android:inputType="textPersonName" />
+
+    <TextView
+        android:id="@+id/textVVoterId"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@id/textVHusband"
+        android:layout_below="@id/textVHusband"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="18dp"
+        android:text="@string/voter_id"
+        android:textColor="@color/colorFont"
+        android:textSize="12dp" />
+
+    <EditText
+        android:id="@+id/editTVoterId"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@id/textVVoterId"
+        android:layout_marginRight="8dp"
+        android:layout_toRightOf="@id/textVVoterId"
+        android:ems="20"
+        android:inputType="number" />
+
+    <TextView
+        android:id="@+id/textVWard"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@id/textVVoterId"
+        android:layout_below="@id/textVVoterId"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="18dp"
+        android:text="@string/ward"
+        android:textColor="@color/colorFont"
+        android:textSize="12dp" />
+
+    <EditText
+        android:id="@+id/editTWard"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@id/textVWard"
+        android:layout_marginRight="8dp"
+        android:layout_toRightOf="@id/textVWard"
+        android:ems="20"
+        android:inputType="number" />
+
+    <TextView
+        android:id="@+id/textVPanchayat"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@id/textVWard"
+        android:layout_below="@id/textVWard"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="18dp"
+        android:text="@string/panchayat"
+        android:textColor="@color/colorFont"
+        android:textSize="12dp" />
+
+    <AutoCompleteTextView
+        android:id="@+id/autoCompleteTVPanchayat"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@id/textVPanchayat"
+        android:layout_marginRight="8dp"
+        android:layout_toRightOf="@id/textVPanchayat"
+        android:ems="8" />
+
+    <TextView
+        android:id="@+id/textVTownCity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@id/textVPanchayat"
+        android:layout_below="@id/textVPanchayat"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="18dp"
+        android:text="@string/town_city"
+        android:textColor="@color/colorFont"
+        android:textSize="12dp" />
+
+    <AutoCompleteTextView
+        android:id="@+id/autoCompleteTVTownCity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@id/textVTownCity"
+        android:layout_marginRight="8dp"
+        android:layout_toRightOf="@id/textVTownCity"
+        android:ems="8" />
+
+    <TextView
+        android:id="@+id/textVDistrict"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@id/textVTownCity"
+        android:layout_below="@id/textVTownCity"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="18dp"
+        android:text="@string/district"
+        android:textColor="@color/colorFont"
+        android:textSize="12dp" />
+
+    <AutoCompleteTextView
+        android:id="@+id/autoCompleteTVDistrict"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@id/textVDistrict"
+        android:layout_alignLeft="@id/autoCompleteTVTownCity"
+        android:layout_marginRight="8dp"
+        android:layout_toRightOf="@id/textVDistrict"
+        android:ems="8" />
+
+    <TextView
+        android:id="@+id/textVMembershipId"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@id/textVDistrict"
+        android:layout_below="@id/textVDistrict"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="18dp"
+        android:text="@string/membership_id"
+        android:textColor="@color/colorFont"
+        android:textSize="12dp" />
+
+    <EditText
+        android:id="@+id/editTMembershipId"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@id/textVMembershipId"
+        android:layout_below="@id/textVDistrict"
+        android:layout_marginRight="8dp"
+        android:layout_toRightOf="@id/textVMembershipId"
+        android:ems="4"
+        android:inputType="number"
+        android:maxLength="8" />
+
+    <TextView
+        android:id="@+id/textVdate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/textVDistrict"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="18dp"
+        android:layout_toRightOf="@id/editTMembershipId"
+        android:text="@string/date"
+        android:textColor="@color/colorFont"
+        android:textSize="12dp" />
+
+    <EditText
+        android:id="@+id/editTDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@id/textVdate"
+        android:layout_below="@id/textVDistrict"
+        android:layout_marginRight="8dp"
+        android:layout_toRightOf="@id/textVdate"
+        android:ems="5"
+        android:inputType="date" />
+
+    <ImageView
+        android:id="@+id/imageVPhoto"
+        android:layout_width="70dp"
+        android:layout_height="90dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginBottom="10dp"
+        android:background="@android:color/white" />
+
+    <TextView
+        android:id="@+id/textVGeneralSecretary"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginBottom="18dp"
+        android:layout_marginEnd="36dp"
+        android:text="@string/general_secretary"
+        android:textColor="@color/colorFont"
+        android:textSize="12dp" />
+
+
+</RelativeLayout>

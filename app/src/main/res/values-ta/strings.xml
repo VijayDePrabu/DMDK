@@ -9,18 +9,18 @@
     <string name="fillup_header">Enter Member details</string>
 
     <!-- IDCard Form Labels and Fields -->
-    <string name="name">Name</string>
-    <string name="age">Age</string>
-    <string name="gender">Gender</string>
-    <string name="husband_name">Father/Husband\'s Name</string>
-    <string name="voter_id">Voter Id</string>
-    <string name="ward">Ward</string>
-    <string name="panchayat">Panchayat</string>
-    <string name="town_city">Town/City</string>
-    <string name="district">District</string>
-    <string name="membership_id">Id</string>
-    <string name="date">Date of Joining</string>
-    <string name="general_secretary">General Secretary</string>
+    <string name="name">பெயர்</string>
+    <string name="age">வயது</string>
+    <string name="gender">பாலினம்</string>
+    <string name="husband_name">தந்தை/கணவர்</string>
+    <string name="voter_id">வாக்காளர் அட்டை எண்</string>
+    <string name="ward">வார்டு</string>
+    <string name="panchayat">பஞ்சாயத்து</string>
+    <string name="town_city">நகரம் / மாநகரம்</string>
+    <string name="district">மாவட்டம்</string>
+    <string name="membership_id">உ.எண்</string>
+    <string name="date">தேதி</string>
+    <string name="general_secretary">பொதுச்செயலர்</string>
 
     <string name="phone">Phone</string>
     <string name="dob">D.O.B</string>
@@ -33,7 +33,5 @@
     <string name="admin_login">Admin</string>
     <string name="admin_registeration">Admin Registeration</string>
     <string name="new_membership_entry">New Membersip Entry</string>
-
-
 
 </resources>
