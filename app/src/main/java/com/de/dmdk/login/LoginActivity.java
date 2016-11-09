@@ -58,12 +58,13 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
             case R.id.btnLogin:
                 if (!TextUtils.isEmpty(editTPhone.getText().toString().trim())) {
                     if (!TextUtils.isEmpty(editTPassword.getText().toString().trim())) {
-
+                        showProgress("");
                         Query queryRef = databaseRefAdmin.orderByChild("phoneNum").equalTo(editTPhone.getText().toString().trim());
                         queryRef.addValueEventListener(new ValueEventListener() {
                             @Override
                             public void onDataChange(DataSnapshot dataSnapshot) {
                                 if (dataSnapshot.getValue() != null) {
+                                    dismissProgress();
                                     for (DataSnapshot childDataSnapshot : dataSnapshot.getChildren()) {
                                         Admin admin = childDataSnapshot.getValue(Admin.class);
                                         if (admin.getPassword().equalsIgnoreCase(editTPassword.getText().toString().trim())) {
@@ -74,6 +75,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
                                     }
 
                                 } else {
+                                    dismissProgress();
                                     showAlertDialog("Login failed. Please check your user name!!");
                                 }
 

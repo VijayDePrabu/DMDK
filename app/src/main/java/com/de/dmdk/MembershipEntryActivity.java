@@ -11,6 +11,7 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Rect;
 import android.graphics.pdf.PdfDocument;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -20,7 +21,7 @@ import android.print.PrintAttributes;
 import android.print.PrintDocumentAdapter;
 import android.print.PrintJob;
 import android.print.PrintManager;
-
+import com.de.dmdk.view.InstantAutoCompleteTextView;
 import android.print.PrinterInfo;
 import android.print.pdf.PrintedPdfDocument;
 import android.support.v4.print.PrintHelper;
@@ -33,6 +34,7 @@ import android.text.TextWatcher;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.TypedValue;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -42,7 +44,6 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -56,6 +57,7 @@ import android.widget.Toast;
 import com.commonsware.cwac.cam2.CameraActivity;
 import com.commonsware.cwac.cam2.Facing;
 import com.commonsware.cwac.cam2.ZoomStyle;
+import com.de.dmdk.languagehelper.LocaleHelper;
 import com.de.dmdk.membership.MemberDatum;
 import com.de.dmdk.permissions.MarshMallowPermission;
 import com.de.dmdk.printhelper.PdfDocumentAdapter;
@@ -85,9 +87,14 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Locale;
+import java.util.regex.Pattern;
+
+import static com.de.dmdk.R.id.autoCompleteTVTownCity;
+import static com.de.dmdk.R.id.editTVoterId;
+import static com.de.dmdk.R.id.idCardLayout;
 
 
-public class MembershipEntryActivity extends AppCompatActivity implements View.OnClickListener,TextWatcher {
+public class MembershipEntryActivity extends BaseActivity implements View.OnClickListener,TextWatcher{
 
 
     private boolean isFormEditable;
@@ -104,10 +111,10 @@ public class MembershipEntryActivity extends AppCompatActivity implements View.O
     private Spinner spinGender;
 
 
-    private AutoCompleteTextView autoCompleteTVEntryFormPanchayat;
-    private AutoCompleteTextView autoCompleteTVTownCity;
-    private AutoCompleteTextView autoCompleteTVDistrict;
-
+    private InstantAutoCompleteTextView autoCompleteTVEntryFormPanchayat;
+    private InstantAutoCompleteTextView autoCompleteTVTownCity;
+    private InstantAutoCompleteTextView autoCompleteTVDistrict;
+    private int purpose;
 
 
     PanchayatDetailsAdapter adapter ;
@@ -132,29 +139,172 @@ public class MembershipEntryActivity extends AppCompatActivity implements View.O
     private EditText editTWard;
     private EditText editTMembershipId;
     private EditText editTDate;
-    private EditText editTMLA;
-    private EditText editTMP;
+    private InstantAutoCompleteTextView editTMLA;
+    private InstantAutoCompleteTextView editTMP;
 
     private Button btnPreview;
     private boolean isBackMenuAvailable, isPrintMenuAvailable, isClearMenuAvailable;
     private int idCardRId;
     private Menu menu;
     private PanchayatDetails selectedPanchayat;
+    private MpMlaDistrict selectedMpMlaDistrict;
     private String tempDOB;
     private boolean isPushMemberData;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        LocaleHelper.setLocale(this,"ta");
         super.onCreate(savedInstanceState);
+        getIntentCheck();
         setContentView(R.layout.activity_new_membership_entry);
         initView();
         setUpListeners();
+        if(purpose == DMDKConstants.PURPOSE_UPDATE_RECORDS) {
+            showDialogs("Update Member Record","Enter the MemberID");
+        }else if(purpose == DMDKConstants.PURPOSE_PRINT) {
+            showDialogs("Print","Enter the MemberID");
+        }
         mgr = (PrintManager) getSystemService(PRINT_SERVICE);
 
         client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
+/*  get all mp, mla,district data*/
+        databaseRootReference.child("mp_mla_district").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot snapshot) {
+                System.out.println("VIJAY "+snapshot.getValue());  //prints "Do you have data? You'll love Firebase."
 
-/*  get all data*/
+                Log.e("Count " ,""+snapshot.getChildrenCount());
+                ArrayList<String>  mp = new ArrayList<String>();
+                ArrayList<String>  mla = new ArrayList<String>();
+/*
+                ArrayList<String>  mpmlaDistrict = new ArrayList<String>();
+*/
+
+                final ArrayList<MpMlaDistrict>  mpMlaDistrictDetailFull = new ArrayList<MpMlaDistrict>();
+
+                for (DataSnapshot single : snapshot.getChildren()) {
+                    MpMlaDistrict mpMlaDistrictDetails= single.getValue(MpMlaDistrict.class);
+                    Log.e("village_panchayat_name" ,""+mpMlaDistrictDetails.getMp_tamil());
+                    if(!TextUtils.isEmpty(mpMlaDistrictDetails.getMp())) {
+                        mp.add(mpMlaDistrictDetails.getMp());
+                    }
+                    mla.add(mpMlaDistrictDetails.getMla());
+/*
+                    mpmlaDistrict.add(mpMlaDistrictDetails.getDistrictTamil());
+*/
+
+                    mpMlaDistrictDetailFull.add(mpMlaDistrictDetails);
+                }
+                /*PanchayatDetailsAdapter adapter =
+                        new PanchayatDetailsAdapter(MembershipEntryActivity.this, R.layout.list_row, panchayatDetail);*/
+                ArrayAdapter<String> adapter =
+                        new ArrayAdapter<String>(MembershipEntryActivity.this, R.layout.list_row,R.id.txtTitle, mp);
+                editTMP.setAdapter(adapter);
+
+                editTMP.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+                    @Override
+                    public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
+                                            long arg3) {
+                        String selected = (String) arg0.getAdapter().getItem(arg2);
+
+                        for(MpMlaDistrict mpMlaDistrict:mpMlaDistrictDetailFull)
+                        {
+                            if(selected.equalsIgnoreCase(mpMlaDistrict.getMp())){
+                                  /*Toast.makeText(MembershipEntryActivity.this,
+                                          "Clicked " + arg2 + " name: " + panchayat.getVillage_panchayat_name_tamil(),
+                                          Toast.LENGTH_SHORT).show();*/
+                                selectedMpMlaDistrict = mpMlaDistrict;
+                                editTMP.setText(mpMlaDistrict.getMp_tamil());
+                                autoCompleteTVDistrict.setText(mpMlaDistrict.getDistrict_tamil());
+
+                                //    autoCompleteTVTownCity.setText(mpMlaDistrict.getDistrict_name());
+                            }
+                        }
+
+                    }
+                });
+
+                /*editTMP.addTextChangedListener(new TextWatcher() {
+
+                    @Override
+                    public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                    }
+
+                    @Override
+                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                    }
+
+                    @Override
+                    public void afterTextChanged(Editable s) {
+                        *//*if((TextUtils.isEmpty(s.toString()) || (null==selectedMpMlaDistrict)) || (!s.toString().equalsIgnoreCase(selectedMpMlaDistrict.getDistrict()))){
+                            selectedMpMlaDistrict = null;
+                            autoCompleteTVDistrict.setText("");
+                        }*//*
+                    }
+                });*/
+
+                /* mla */
+                ArrayAdapter<String> adaptereditTMLA =
+                        new ArrayAdapter<String>(MembershipEntryActivity.this, R.layout.list_row,R.id.txtTitle, mla);
+                editTMLA.setAdapter(adaptereditTMLA);
+
+                editTMLA.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+                    @Override
+                    public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
+                                            long arg3) {
+                        String selected = (String) arg0.getAdapter().getItem(arg2);
+
+                        for(MpMlaDistrict mpMlaDistrict:mpMlaDistrictDetailFull)
+                        {
+                            if(selected.equalsIgnoreCase(mpMlaDistrict.getMla())){
+                                  /*Toast.makeText(MembershipEntryActivity.this,
+                                          "Clicked " + arg2 + " name: " + panchayat.getVillage_panchayat_name_tamil(),
+                                          Toast.LENGTH_SHORT).show();*/
+                                selectedMpMlaDistrict = mpMlaDistrict;
+                                editTMLA.setText(mpMlaDistrict.getMla_tamil());
+                                autoCompleteTVDistrict.setText(mpMlaDistrict.getDistrict_tamil());
+                                //    autoCompleteTVTownCity.setText(mpMlaDistrict.getDistrict_name());
+                            }
+                        }
+
+                    }
+                });
+
+               /* editTMP.addTextChangedListener(new TextWatcher() {
+
+                    @Override
+                    public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                    }
+
+                    @Override
+                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                    }
+
+                    @Override
+                    public void afterTextChanged(Editable s) {
+                       *//* if((TextUtils.isEmpty(s.toString()) || (null==selectedMpMlaDistrict)) || (!s.toString().equalsIgnoreCase(selectedMpMlaDistrict.getDistrict()))){
+                            selectedMpMlaDistrict = null;
+                            autoCompleteTVDistrict.setText("");
+                        }*//*
+                    }
+                });*/
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+
+
+        });
+/*  get all panchayat data*/
         databaseRootReference.child("autocomplete").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot snapshot) {
@@ -176,7 +326,6 @@ public class MembershipEntryActivity extends AppCompatActivity implements View.O
                         new PanchayatDetailsAdapter(MembershipEntryActivity.this, R.layout.list_row, panchayatDetail);*/
                 ArrayAdapter<String> adapter =
                         new ArrayAdapter<String>(MembershipEntryActivity.this, R.layout.list_row,R.id.txtTitle, panchayatName);
-                autoCompleteTVEntryFormPanchayat.setThreshold(1);
                 autoCompleteTVEntryFormPanchayat.setAdapter(adapter);
 
                 autoCompleteTVEntryFormPanchayat.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -193,9 +342,9 @@ public class MembershipEntryActivity extends AppCompatActivity implements View.O
                                           "Clicked " + arg2 + " name: " + panchayat.getVillage_panchayat_name_tamil(),
                                           Toast.LENGTH_SHORT).show();*/
                                   selectedPanchayat = panchayat;
-                                  autoCompleteTVEntryFormPanchayat.setText(panchayat.getVillage_panchayat_name());
-                                  autoCompleteTVDistrict.setText(panchayat.getDistrict_name());
-                                  autoCompleteTVTownCity.setText(panchayat.getDistrict_name());
+                                  autoCompleteTVEntryFormPanchayat.setText(panchayat.getVillage_panchayat_name_tamil());
+                                  autoCompleteTVDistrict.setText(panchayat.getDistrict_name_tamil());
+                                  autoCompleteTVTownCity.setText(panchayat.getDistrict_name_tamil());
                               }
                         }
 
@@ -268,6 +417,11 @@ public class MembershipEntryActivity extends AppCompatActivity implements View.O
 
     }
 
+    private void getIntentCheck() {
+        Intent intent = getIntent();
+        purpose = intent.getIntExtra(DMDKConstants.PURPOSE,DMDKConstants.PURPOSE_NEW_REGISTER);
+    }
+
     private void setUpListeners() {
         imageVPhoto.setOnClickListener(this);
         autoCompleteTVEntryFormPanchayat.addTextChangedListener(this);
@@ -275,6 +429,16 @@ public class MembershipEntryActivity extends AppCompatActivity implements View.O
         ArrayAdapter<String> genderAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, genderArray);
         genderAdapter.setDropDownViewResource(R.layout.spinner_dropdown);
         spinGender.setAdapter(genderAdapter);
+         editTPhone.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+             @Override
+             public void onFocusChange(View v, boolean hasFocus) {
+                 if(!hasFocus) {
+                    if(TextUtils.isEmpty(editTPhone.getText().toString()) && (!isValidMobile(editTPhone.getText().toString()))){
+                        showAlertDialog("Enter valid phone number");
+                    }
+                 }
+             }
+         });
         editTDOB.setOnClickListener(this);
         editTPhone.addTextChangedListener(new TextWatcher() {
 
@@ -310,12 +474,36 @@ public class MembershipEntryActivity extends AppCompatActivity implements View.O
             public void afterTextChanged(Editable s) {
                 if((!TextUtils.isEmpty(editTPhone.getText().toString().trim()) && (!TextUtils.isEmpty(s.toString())))  && (!s.toString().equalsIgnoreCase(tempDOB))){
                     tempDOB= s.toString();
-                    verifyPhoneDOB();
+                    if((purpose != DMDKConstants.PURPOSE_UPDATE_RECORDS) && (purpose != DMDKConstants.PURPOSE_PRINT)) {
+                        verifyPhoneDOB();
+                    }
                 }
             }
         });
 
         btnPreview.setOnClickListener(this);
+    }
+
+    private boolean isValidMobile(String phone2)
+    {
+        boolean check=false;
+        if(!Pattern.matches("[a-zA-Z]+", phone2))
+        {
+            if(phone2.length() < 6 || phone2.length() > 13)
+            {
+                check = false;
+                editTPhone.setError(editTPhone.getText());
+            }
+            else
+            {
+                check = true;
+            }
+        }
+        else
+        {
+            check=false;
+        }
+        return check;
     }
 
     private void verifyPhoneDOB() {
@@ -364,10 +552,10 @@ public class MembershipEntryActivity extends AppCompatActivity implements View.O
     private void initView() {
         mLinearLayout = (LinearLayout) findViewById(R.id.linearLayout_focus);
         imageVPhoto = (ImageView) findViewById(R.id.imageVPhoto);
-        spinGender = (Spinner)findViewById(R.id.spinGender);
-        autoCompleteTVEntryFormPanchayat = (AutoCompleteTextView)findViewById(R.id.autoCompleteTVPanchayat);
-        autoCompleteTVTownCity = (AutoCompleteTextView)findViewById(R.id.autoCompleteTVTownCity);
-        autoCompleteTVDistrict = (AutoCompleteTextView)findViewById(R.id.autoCompleteTVDistrict);
+        spinGender = (Spinner)findViewById(R.id.gender);
+        autoCompleteTVEntryFormPanchayat = (InstantAutoCompleteTextView)findViewById(R.id.autoCompleteTVPanchayat);
+        autoCompleteTVTownCity = (InstantAutoCompleteTextView)findViewById(R.id.autoCompleteTVTownCity);
+        autoCompleteTVDistrict = (InstantAutoCompleteTextView)findViewById(R.id.autoCompleteTVDistrict);
       //  dotLoader = (DotLoader) findViewById(R.id.dotLoader);
 
 
@@ -375,14 +563,13 @@ public class MembershipEntryActivity extends AppCompatActivity implements View.O
         editTPhone = (EditText)findViewById( R.id.editTPhone );
         editTName = (EditText)findViewById( R.id.editTName );
         editTDOB = (EditText)findViewById( R.id.editTDOB );
-        spinGender = (Spinner)findViewById( R.id.spinGender );
         editTHusband = (EditText)findViewById( R.id.editTHusband );
         editTVoterId = (EditText)findViewById( R.id.editTVoterId );
         editTWard = (EditText)findViewById( R.id.editTWard );
         editTMembershipId = (EditText)findViewById( R.id.editTMembershipId );
         editTDate = (EditText)findViewById( R.id.editTDate );
-        editTMLA = (EditText)findViewById( R.id.editTMLA );
-        editTMP = (EditText)findViewById( R.id.editTMP );
+        editTMLA = (InstantAutoCompleteTextView)findViewById( R.id.editTMLA );
+        editTMP = (InstantAutoCompleteTextView)findViewById( R.id.editTMP );
 
         btnPreview = (Button) findViewById(R.id.btnPreview);
 
@@ -419,7 +606,7 @@ public class MembershipEntryActivity extends AppCompatActivity implements View.O
                 if (mLinearLayout != null) {
                     mLinearLayout.requestFocus();
                 }
-                idCardView = (View) findViewById(R.id.idCardLayout);
+                idCardView = (View) findViewById(idCardLayout);
                 idCardView.setVisibility(View.VISIBLE);
                 RelativeLayout layout=(RelativeLayout)findViewById(R.id.few);
 
@@ -436,7 +623,30 @@ public class MembershipEntryActivity extends AppCompatActivity implements View.O
                     Bitmap bitmap = Bitmap.createBitmap(convertDpToPx(332), convertDpToPx(472),
                             Bitmap.Config.ARGB_8888);
                     Canvas canvas = new Canvas(bitmap);
-                    idCard.draw(canvas);
+
+                    /* temporrily remove icons borders and secretart signature for printing*/
+                    View printPartView= idCard;
+
+                    printPartView.setBackgroundResource(R.drawable.print_part_border);
+                    printPartView.findViewById(R.id.imageVFlagIcon).setVisibility(View.INVISIBLE);
+                    printPartView.findViewById(R.id.imageVSymbolIcon).setVisibility(View.INVISIBLE);
+                    printPartView.findViewById(R.id.textVGeneralSecretary).setVisibility(View.INVISIBLE);
+
+
+                    printPartView.draw(canvas);
+
+                   /* back to how it is was before sending printing part*/
+                    idCard.setBackgroundResource(R.drawable.id_card_border);
+                    idCard.setPadding(convertDpToPx(32), convertDpToPx(16),convertDpToPx(32), 0);
+                    idCard.findViewById(R.id.imageVFlagIcon).setVisibility(View.VISIBLE);
+                    idCard.findViewById(R.id.imageVSymbolIcon).setVisibility(View.VISIBLE);
+                    idCard.findViewById(R.id.textVGeneralSecretary).setVisibility(View.VISIBLE);
+
+                    PrintHelper help = new PrintHelper(this);
+                    help.setScaleMode(PrintHelper.SCALE_MODE_FIT);
+                    help.printBitmap("IDCard", bitmap);
+
+
                     // old code
                     /*PrintHelper help = new PrintHelper(this);
                     help.setScaleMode(PrintHelper.SCALE_MODE_FIT);
@@ -473,22 +683,13 @@ public class MembershipEntryActivity extends AppCompatActivity implements View.O
                     /*PrintUtil.print(this);*/
 
                     // posifix code
-                    USBAdapter usbAdapter = new USBAdapter();
-                    usbAdapter.printBitmap(this,bitmap);
+                    /*USBAdapter usbAdapter = new USBAdapter();
+                    usbAdapter.printBitmap(this,bitmap);*/
                 }
                 return true;
             case R.id.clear_form:
-                if(idCard!=null) {
-                    Bitmap bitmap = Bitmap.createBitmap(convertDpToPx(332), convertDpToPx(472),
-                            Bitmap.Config.ARGB_8888);
-                    Canvas canvas = new Canvas(bitmap);
-                    idCard.draw(canvas);
-                    PrintHelper help = new PrintHelper(this);
-                    help.setScaleMode(PrintHelper.SCALE_MODE_FIT);
-                    help.printBitmap("IDCard", bitmap);
-                }
 
-               /* ViewGroup group = (ViewGroup)findViewById(R.id.idCardLayout);
+                ViewGroup group = (ViewGroup)findViewById(idCardLayout);
                 for (int i = 0, count = group.getChildCount(); i < count; ++i) {
                     View view = group.getChildAt(i);
                     if (view instanceof EditText) {
@@ -496,7 +697,7 @@ public class MembershipEntryActivity extends AppCompatActivity implements View.O
                     }
                 }
 
-                imageVPhoto.setImageDrawable(getResources().getDrawable(android.R.drawable.ic_menu_camera));*/
+                imageVPhoto.setImageDrawable(getResources().getDrawable(android.R.drawable.ic_menu_camera));
                 return true;
             /*case R.id.action_options:
 
@@ -597,7 +798,9 @@ public class MembershipEntryActivity extends AppCompatActivity implements View.O
                 showStartDateDialog();
                 break;
             case R.id.btnPreview:
-                verifyPhoneDOB();
+                if((purpose != DMDKConstants.PURPOSE_UPDATE_RECORDS) && (purpose != DMDKConstants.PURPOSE_PRINT)) {
+                    verifyPhoneDOB();
+                }
 
                 if(selectedPanchayat==null){
                     showAlertDialog("Panchayat/Town/City/District details manually typed. Tamil Translation not available!");
@@ -619,7 +822,7 @@ public class MembershipEntryActivity extends AppCompatActivity implements View.O
                     }
                     // end of storing to database
 
-                    idCardView = (View) findViewById(R.id.idCardLayout);
+                    idCardView = (View) findViewById(idCardLayout);
                     idCardView.setVisibility(View.GONE);
                     RelativeLayout layout = (RelativeLayout) findViewById(R.id.few);
 
@@ -661,8 +864,14 @@ public class MembershipEntryActivity extends AppCompatActivity implements View.O
             memberDatum.setGender("-");
         }
         memberDatum.setVoterId(editTVoterId.getText().toString());
-        memberDatum.setMp(editTMP.getText().toString());
-        memberDatum.setMla(editTMLA.getText().toString());
+        if(selectedMpMlaDistrict!=null) {
+            memberDatum.setMp(selectedMpMlaDistrict.getMp_tamil());
+            memberDatum.setMla(selectedMpMlaDistrict.getMla_tamil());
+        }
+        else{
+            memberDatum.setMp(editTMP.getText().toString());
+            memberDatum.setMla(editTMLA.getText().toString());
+        }
         if(selectedPanchayat!=null) {
             memberDatum.setPanchayat(selectedPanchayat.getVillage_panchayat_name_tamil());
         }
@@ -691,7 +900,7 @@ public class MembershipEntryActivity extends AppCompatActivity implements View.O
     }
 
     private boolean isAllFieldsFilled() {
-        ViewGroup group = (ViewGroup)findViewById(R.id.idCardLayout);
+        ViewGroup group = (ViewGroup)findViewById(idCardLayout);
         for (int i = 0, count = group.getChildCount(); i < count; ++i) {
             View view = group.getChildAt(i);
             if (view instanceof EditText) {
@@ -730,7 +939,7 @@ public class MembershipEntryActivity extends AppCompatActivity implements View.O
         PrintedPdfDocument document = new PrintedPdfDocument(this, builder.build());
 
         Page page = document.startPage(1);
-        idCardView = (View) findViewById(R.id.idCardLayout);
+        idCardView = (View) findViewById(idCardLayout);
 
         View content = idCardView;
 
@@ -788,7 +997,7 @@ public class MembershipEntryActivity extends AppCompatActivity implements View.O
         // start a page
         Page page = document.startPage(pageInfo);
 
-        idCardView = (View) findViewById(R.id.idCardLayout);
+        idCardView = (View) findViewById(idCardLayout);
 
 
         Canvas canvas = page.getCanvas();
@@ -981,22 +1190,9 @@ public class MembershipEntryActivity extends AppCompatActivity implements View.O
     @Override
     public void onStop() {
         super.onStop();
-
-        // ATTENTION: This was auto-generated to implement the App Indexing API.
-        // See https://g.co/AppIndexing/AndroidStudio for more information.
-        Action viewAction = Action.newAction(
-                Action.TYPE_VIEW, // TODO: choose an action type.
-                "IDCardPreview Page", // TODO: Define a title for the content shown.
-                // TODO: If you have web page content that matches this app activity's content,
-                // make sure this auto-generated web page URL is correct.
-                // Otherwise, set the URL to null.
-                Uri.parse("http://host/path"),
-                // TODO: Make sure this auto-generated app URL is correct.
-                Uri.parse("android-app://com.de.dmdk/http/host/path")
-        );
-        AppIndex.AppIndexApi.end(client, viewAction);
-        client.disconnect();
+        LocaleHelper.setLocale(this,"en");
     }
+
 
 
 
@@ -1076,8 +1272,6 @@ public class MembershipEntryActivity extends AppCompatActivity implements View.O
         layout_391.height = RelativeLayout.LayoutParams.WRAP_CONTENT;
         layout_391.addRule(RelativeLayout.BELOW, R.id.imageVFlagIcon);
 
-        layout_391.rightMargin = convertDpToPx(8);
-        layout_391.topMargin = convertDpToPx(10);
         textVName.setLayoutParams(layout_391);
         idCardLayout.addView(textVName);
 
@@ -1085,6 +1279,7 @@ public class MembershipEntryActivity extends AppCompatActivity implements View.O
         editTNamePrint.setId(R.id.editTName);
         editTNamePrint.setEms(20);
         editTNamePrint.setRawInputType(InputType.TYPE_TEXT_VARIATION_PERSON_NAME);
+        editTNamePrint.setLines(1);
         editTNamePrint.setText(editTName.getText().toString().trim());
         setEditTextEditable(editTNamePrint, false);
         editTNamePrint.setTextSize(TypedValue.COMPLEX_UNIT_SP,12);
@@ -1109,7 +1304,7 @@ public class MembershipEntryActivity extends AppCompatActivity implements View.O
         layout_131.addRule(RelativeLayout.BELOW, R.id.textVName);
         layout_131.addRule(RelativeLayout.ALIGN_LEFT, R.id.textVName);
         layout_131.rightMargin = convertDpToPx(8);
-        layout_131.topMargin = convertDpToPx(18);
+        layout_131.topMargin = convertDpToPx(15);
         textVAge.setLayoutParams(layout_131);
         idCardLayout.addView(textVAge);
 
@@ -1174,7 +1369,7 @@ public class MembershipEntryActivity extends AppCompatActivity implements View.O
         layout_19.addRule(RelativeLayout.BELOW, R.id.textVAge);
         layout_19.addRule(RelativeLayout.ALIGN_LEFT, R.id.textVAge);
         layout_19.rightMargin = convertDpToPx(8);
-        layout_19.topMargin = convertDpToPx(18);
+        layout_19.topMargin = convertDpToPx(15);
         textVHusband.setLayoutParams(layout_19);
         idCardLayout.addView(textVHusband);
 
@@ -1206,7 +1401,7 @@ public class MembershipEntryActivity extends AppCompatActivity implements View.O
         layout_760.addRule(RelativeLayout.BELOW, R.id.textVHusband);
         layout_760.addRule(RelativeLayout.ALIGN_LEFT, R.id.textVHusband);
         layout_760.rightMargin = convertDpToPx(8);
-        layout_760.topMargin = convertDpToPx(18);
+        layout_760.topMargin = convertDpToPx(15);
         textVVoterId.setLayoutParams(layout_760);
         idCardLayout.addView(textVVoterId);
 
@@ -1237,7 +1432,7 @@ public class MembershipEntryActivity extends AppCompatActivity implements View.O
         layout_61.addRule(RelativeLayout.BELOW, R.id.textVVoterId);
         layout_61.addRule(RelativeLayout.ALIGN_LEFT, R.id.textVVoterId);
         layout_61.rightMargin = convertDpToPx(8);
-        layout_61.topMargin = convertDpToPx(18);
+        layout_61.topMargin = convertDpToPx(15);
         textVWard.setLayoutParams(layout_61);
         idCardLayout.addView(textVWard);
 
@@ -1268,11 +1463,11 @@ public class MembershipEntryActivity extends AppCompatActivity implements View.O
         layout_695.addRule(RelativeLayout.BELOW, R.id.textVWard);
         layout_695.addRule(RelativeLayout.ALIGN_LEFT, R.id.textVWard);
         layout_695.rightMargin = convertDpToPx(8);
-        layout_695.topMargin = convertDpToPx(18);
+        layout_695.topMargin = convertDpToPx(15);
         textVPanchayat.setLayoutParams(layout_695);
         idCardLayout.addView(textVPanchayat);
 
-        AutoCompleteTextView autoCompleteTVPanchayatPrint = new AutoCompleteTextView(this);
+        InstantAutoCompleteTextView autoCompleteTVPanchayatPrint = new InstantAutoCompleteTextView(this);
         autoCompleteTVPanchayatPrint.setId(R.id.autoCompleteTVPanchayatPrint);
         autoCompleteTVPanchayatPrint.setEms(12);
         if(selectedPanchayat!=null) {
@@ -1303,11 +1498,11 @@ public class MembershipEntryActivity extends AppCompatActivity implements View.O
         layout_528.addRule(RelativeLayout.BELOW, R.id.textVPanchayat);
         layout_528.addRule(RelativeLayout.ALIGN_LEFT, R.id.textVPanchayat);
         layout_528.rightMargin = convertDpToPx(8);
-        layout_528.topMargin = convertDpToPx(18);
+        layout_528.topMargin = convertDpToPx(15);
         textVTownCity.setLayoutParams(layout_528);
         idCardLayout.addView(textVTownCity);
 
-        AutoCompleteTextView autoCompleteTVTownCityPrint = new AutoCompleteTextView(this);
+        InstantAutoCompleteTextView autoCompleteTVTownCityPrint = new InstantAutoCompleteTextView(this);
         autoCompleteTVTownCityPrint.setId(R.id.autoCompleteTVTownCityPrint);
         autoCompleteTVTownCityPrint.setEms(8);
         if(selectedPanchayat!=null) {
@@ -1341,11 +1536,11 @@ public class MembershipEntryActivity extends AppCompatActivity implements View.O
         layout_45.addRule(RelativeLayout.BELOW, R.id.textVTownCity);
         layout_45.addRule(RelativeLayout.ALIGN_LEFT, R.id.textVTownCity);
         layout_45.rightMargin = convertDpToPx(8);
-        layout_45.topMargin = convertDpToPx(18);
+        layout_45.topMargin = convertDpToPx(15);
         textVDistrict.setLayoutParams(layout_45);
         idCardLayout.addView(textVDistrict);
 
-        AutoCompleteTextView autoCompleteTVDistrictPrint = new AutoCompleteTextView(this);
+        InstantAutoCompleteTextView autoCompleteTVDistrictPrint = new InstantAutoCompleteTextView(this);
         autoCompleteTVDistrictPrint.setId(R.id.autoCompleteTVDistrictPrint);
         autoCompleteTVDistrictPrint.setEms(8);
         if(selectedPanchayat!=null) {
@@ -1376,7 +1571,7 @@ public class MembershipEntryActivity extends AppCompatActivity implements View.O
         layout_961.addRule(RelativeLayout.BELOW, R.id.textVDistrict);
         layout_961.addRule(RelativeLayout.ALIGN_LEFT, R.id.textVDistrict);
         layout_961.rightMargin = convertDpToPx(8);
-        layout_961.topMargin = convertDpToPx(18);
+        layout_961.topMargin = convertDpToPx(15);
         layout_961.bottomMargin = convertDpToPx(10);
         textVMembershipId.setLayoutParams(layout_961);
         idCardLayout.addView(textVMembershipId);
@@ -1408,7 +1603,7 @@ public class MembershipEntryActivity extends AppCompatActivity implements View.O
         layout_70.addRule(RelativeLayout.RIGHT_OF, R.id.editTMembershipIdPrint);
         layout_70.addRule(RelativeLayout.ALIGN_BASELINE, R.id.editTMembershipIdPrint);
         layout_70.rightMargin = convertDpToPx(8);
-        layout_70.topMargin = convertDpToPx(18);
+        layout_70.topMargin = convertDpToPx(15);
         textVdate.setLayoutParams(layout_70);
         idCardLayout.addView(textVdate);
 
@@ -1481,12 +1676,12 @@ public class MembershipEntryActivity extends AppCompatActivity implements View.O
         int mMonth = c.get(Calendar.MONTH);
         int mDay = c.get(Calendar.DAY_OF_MONTH);
         System.out.println("the selected " + mDay);
-        DatePickerDialog dialog = new DatePickerDialog(this,
+        DatePickerDialog dialog = new DatePickerDialog(this,android.R.style.Theme_Holo_Dialog,
                 new mDateSetListener(), mYear, mMonth, mDay);
         dialog.show();
     }
 
-    public void showAlertDialog(String message){
+/*    public void showAlertDialog(String message){
         AlertDialog alertDialog = new AlertDialog.Builder(this).create();
         alertDialog.setTitle(getString(R.string.app_name));
         alertDialog.setMessage(message);
@@ -1497,7 +1692,7 @@ public class MembershipEntryActivity extends AppCompatActivity implements View.O
                     }
                 });
         alertDialog.show();
-    }
+    }*/
 
     class mDateSetListener implements DatePickerDialog.OnDateSetListener {
 
@@ -1575,4 +1770,119 @@ public class MembershipEntryActivity extends AppCompatActivity implements View.O
         }catch(Exception e){
         }
     }*/
+
+
+    private void showDialogs(String title,String message){
+        LayoutInflater linf = LayoutInflater.from(this);
+        final View inflator = linf.inflate(R.layout.search_dialog, null);
+        AlertDialog.Builder alert = new AlertDialog.Builder(this,R.style.DialogTheme);
+
+        alert.setTitle(title);
+        /*alert.setMessage(message);*/
+        alert.setView(inflator);
+
+        final EditText et1 = (EditText) inflator.findViewById(R.id.editTSearchMemberId);
+
+        alert.setPositiveButton("ok", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton)
+            {
+                if(!TextUtils.isEmpty(et1.getText())) {
+                    searchMember(et1.getText().toString().trim());
+                }else{
+                    showAlertDialog("Please enter memberid");
+                }
+            }
+        });
+
+        alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                dialog.cancel();
+                finish();
+            }
+        });
+
+        alert.show();
+    }
+
+    /* Search member */
+
+    private void searchMember(final String memberID) {
+        showProgress("");
+        Query queryRef = databaseMemberDataReference.orderByChild("membershipId").equalTo(memberID)/*.orderByChild("dob")*/;
+        queryRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if(dataSnapshot.getValue() != null){
+                    dismissProgress();
+                    for(DataSnapshot childDataSnapshot:dataSnapshot.getChildren()){
+                        MemberDatum memberDatum= childDataSnapshot.getValue(MemberDatum.class);
+                        if(memberDatum.getMembershipId().equalsIgnoreCase(memberID)){
+                            //  Toast.makeText(getApplicationContext(),memberDatum.getName()+" Member already found!!!",Toast.LENGTH_SHORT).show();
+                            showAlertDialog("Member "+memberDatum.getName()+" found!!!");
+                            if(purpose == DMDKConstants.PURPOSE_UPDATE_RECORDS) {
+                                btnPreview.setText("Update");
+                            }else if(purpose == DMDKConstants.PURPOSE_PRINT){
+                                btnPreview.setText("Print");
+                            }
+                            btnPreview.setEnabled(true);
+
+                            fillData(memberDatum);
+
+                            isPushMemberData = true;
+                            return;
+                        }else{
+                            //  Toast.makeText(getApplicationContext(),"Phone number already used!!",Toast.LENGTH_SHORT).show();
+                            if(isClearMenuAvailable) {
+                                showAlertDialog("Member "+memberID+" not found!!!");
+                                if(purpose == DMDKConstants.PURPOSE_UPDATE_RECORDS) {
+                                    btnPreview.setText("Update");
+                                }else if(purpose == DMDKConstants.PURPOSE_PRINT){
+                                    btnPreview.setText("Print");
+                                }                                btnPreview.setEnabled(false);
+                            }
+                            isPushMemberData = false;
+                            return;
+                        }
+                    }
+
+                }else{
+                    dismissProgress();
+                    if(isClearMenuAvailable) {
+                        showAlertDialog("Member "+memberID+" not found!!!");
+                        if(purpose == DMDKConstants.PURPOSE_UPDATE_RECORDS) {
+                            btnPreview.setText("Update");
+                        }else if(purpose == DMDKConstants.PURPOSE_PRINT){
+                            btnPreview.setText("Print");
+                        }                        btnPreview.setEnabled(false);
+                    }
+                    isPushMemberData = false;
+                    return;
+
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                dismissProgress();
+
+            }
+        });
+    }
+
+    private void fillData(MemberDatum memberDatum) {
+        editTPhone.setText(memberDatum.getPhone());
+        editTDOB.setText(memberDatum.getDob());
+        editTMembershipId.setText(memberDatum.getMembershipId());
+        editTName.setText(memberDatum.getName());
+        editTHusband.setText(memberDatum.getHusbandName());
+        editTVoterId.setText(memberDatum.getVoterId());
+        editTMP.setText(memberDatum.getMp());
+        editTMLA.setText(memberDatum.getMla());
+        autoCompleteTVDistrict.setText(memberDatum.getDistrict());
+        autoCompleteTVEntryFormPanchayat.setText(memberDatum.getPanchayat());
+        autoCompleteTVTownCity.setText(memberDatum.getTownCity());
+        editTDate.setText(memberDatum.getDoj());
+    }
+
+
 }

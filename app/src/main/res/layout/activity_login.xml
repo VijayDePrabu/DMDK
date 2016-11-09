@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:background="@drawable/app_bg"
+    android:layout_height="match_parent"
+    android:background="@drawable/background_image"
     android:fitsSystemWindows="true">
 
     <LinearLayout
@@ -11,8 +11,9 @@
         android:layout_height="wrap_content"
         android:paddingTop="56dp"
         android:paddingLeft="24dp"
-        android:paddingRight="24dp">
-        <!--android:background="@drawable/background_image"-->
+        android:paddingRight="24dp"
+        android:layout_gravity="center"
+        >
 
         <ImageView android:src="@drawable/splash_core_image"
             android:layout_width="@dimen/screen_app_logo_size"
@@ -29,7 +30,7 @@
             <EditText android:id="@+id/editTPhone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="phone"
+                android:inputType="textVisiblePassword"
                 android:hint="Phone"/>
         </android.support.design.widget.TextInputLayout>
 
@@ -48,12 +49,12 @@
 
         <android.support.v7.widget.AppCompatButton
             android:id="@+id/btnLogin"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_height="82dp"
             android:layout_marginTop="24dp"
             android:layout_marginBottom="24dp"
             android:padding="12dp"
-            android:backgroundTint="@color/colorBaggyGreen"
+            android:background="@drawable/loginbtn"
             android:text="Login"/>
 
         <TextView android:id="@+id/textVLinkRegister"

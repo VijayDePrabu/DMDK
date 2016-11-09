@@ -165,7 +165,7 @@
         android:textColor="@color/colorFont"
         android:textSize="12dp" />
 
-    <AutoCompleteTextView
+    <com.de.dmdk.view.InstantAutoCompleteTextView
         android:id="@+id/autoCompleteTVPanchayat"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -186,7 +186,7 @@
         android:textColor="@color/colorFont"
         android:textSize="12dp" />
 
-    <AutoCompleteTextView
+    <com.de.dmdk.view.InstantAutoCompleteTextView
         android:id="@+id/autoCompleteTVTownCity"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -207,7 +207,7 @@
         android:textColor="@color/colorFont"
         android:textSize="12dp" />
 
-    <AutoCompleteTextView
+    <com.de.dmdk.view.InstantAutoCompleteTextView
         android:id="@+id/autoCompleteTVDistrict"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

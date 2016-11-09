@@ -5,8 +5,9 @@
     <string name="clear_form">Clear form</string>
     <string name="options">Options</string>
     <string name="about">About app</string>
+    <string name="submit">சமர்ப்பிக்கவும்</string>
 
-    <string name="fillup_header">Enter Member details</string>
+    <string name="fillup_header">உறுப்பினர் விவரங்களை உள்ளிடவும்</string>
 
     <!-- IDCard Form Labels and Fields -->
     <string name="name">பெயர்</string>
@@ -22,10 +23,10 @@
     <string name="date">தேதி</string>
     <string name="general_secretary">பொதுச்செயலர்</string>
 
-    <string name="phone">Phone</string>
-    <string name="dob">D.O.B</string>
-    <string name="mla">MLA Constituency</string>
-    <string name="mp">MP Constituency</string>
+    <string name="phone">தொலைபேசி</string>
+    <string name="dob">பி.தேதி</string>
+    <string name="mla">ச.தொகுதி</string>
+    <string name="mp">பா.தொகுதி</string>
 
     <string name="close_app_msg">Close application?!</string>
 

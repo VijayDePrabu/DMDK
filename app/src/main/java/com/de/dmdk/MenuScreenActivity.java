@@ -10,7 +10,7 @@ import com.de.dmdk.membership.NewMembershipEntryActivity;
 
 public class MenuScreenActivity extends BaseActivity implements View.OnClickListener {
 
-    private Button btnNewRegister;
+    private Button btnNewRegister,btnRecentRegister,btnUpdateRecords,btnPrint,btnReports;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,10 +23,20 @@ public class MenuScreenActivity extends BaseActivity implements View.OnClickList
 
     private void initViews() {
         btnNewRegister = (Button)findViewById(R.id.btnNewRegister);
+        btnRecentRegister = (Button)findViewById(R.id.btnRecentRegister);
+        btnUpdateRecords = (Button)findViewById(R.id.btnUpdateRecords);
+        btnPrint = (Button)findViewById(R.id.btnPrint);
+        btnReports = (Button)findViewById(R.id.btnReports);
     }
 
     private void setUpListeners() {
+
         btnNewRegister.setOnClickListener(this);
+        btnRecentRegister.setOnClickListener(this);
+        btnUpdateRecords.setOnClickListener(this);
+        btnPrint.setOnClickListener(this);
+        btnReports.setOnClickListener(this);
+
     }
 
 
@@ -34,10 +44,28 @@ public class MenuScreenActivity extends BaseActivity implements View.OnClickList
     public void onClick(View view) {
         switch(view.getId()){
             case R.id.btnNewRegister:
-                Intent intentLogin = new Intent(this, MembershipEntryActivity.class);
-                startActivity(intentLogin);
+                Intent intentNewRegister = new Intent(this, MembershipEntryActivity.class);
+                intentNewRegister.putExtra(DMDKConstants.PURPOSE,DMDKConstants.PURPOSE_NEW_REGISTER);
+                startActivity(intentNewRegister);
                 break;
-
+            case R.id.btnRecentRegister:
+                Intent intentRecentRegister= new Intent(this, RecentMembershipsActivity.class);
+                startActivity(intentRecentRegister);
+                break;
+            case R.id.btnUpdateRecords:
+                Intent intentUpdateRecords = new Intent(this, MembershipEntryActivity.class);
+                intentUpdateRecords.putExtra(DMDKConstants.PURPOSE,DMDKConstants.PURPOSE_UPDATE_RECORDS);
+                startActivity(intentUpdateRecords);
+                break;
+            case R.id.btnPrint:
+                Intent intentPrint = new Intent(this, MembershipEntryActivity.class);
+                intentPrint.putExtra(DMDKConstants.PURPOSE,DMDKConstants.PURPOSE_PRINT);
+                startActivity(intentPrint);
+                break;
+            case R.id.btnReports:
+                Intent intentReports = new Intent(this, ReportsActivity.class);
+                startActivity(intentReports);
+                break;
         }
     }
 

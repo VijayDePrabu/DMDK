@@ -3,12 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     android:background="@drawable/app_bg"
     >
 
     <RelativeLayout
         android:id="@+id/few"
+        android:gravity="center"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -18,6 +19,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+
             android:paddingBottom="@dimen/activity_vertical_margin"
             android:paddingLeft="@dimen/activity_horizontal_margin"
             android:paddingRight="@dimen/activity_horizontal_margin"
@@ -40,6 +42,7 @@
                 android:textAllCaps="true"
                 android:textStyle="bold"
                 android:textSize="16dp"
+                android:gravity="center"
                 android:textColor="@color/colorEntryTextHead"
                 android:paddingBottom="12dp"
                 android:text="@string/fillup_header" />
@@ -48,7 +51,7 @@
                 android:layout_width="120dp"
                 android:layout_height="100dp"
                 android:layout_below="@id/textVHeader"
-                android:src="@android:drawable/ic_menu_camera"
+                android:src="@drawable/cam"
                 android:layout_centerHorizontal="true"
                 />
 
@@ -110,6 +113,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="20"
+                android:lines="1"
                 android:inputType="textPersonName"
                 android:text=""
                 android:hint="@string/name"/>
@@ -129,18 +133,10 @@
                 android:inputType="textPersonName"
                 android:layout_below="@id/wname" />
     </android.support.design.widget.TextInputLayout>
-            <Spinner
-                android:id="@+id/spinGender"
-                android:layout_width="wrap_content"
-                android:layout_height="30dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="10dp"
-                android:layout_below="@id/whname"
-                 />
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/spinGender"
+                android:layout_below="@id/whname"
                 android:id="@+id/wvoterid">
 
             <EditText
@@ -151,12 +147,23 @@
                 android:inputType="number"
                 android:hint="@string/voter_id"/>
             </android.support.design.widget.TextInputLayout>
+            <Spinner
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/gender"
+                android:popupBackground="@drawable/app_bg"
+                android:background="@drawable/app_bg"
+                android:spinnerMode="dropdown"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:layout_below="@id/wvoterid"
+                android:layout_alignParentStart="true" />
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/wvoterid"
+                android:layout_below="@id/gender"
                 android:id="@+id/wmp">
-                <EditText
+                <com.de.dmdk.view.InstantAutoCompleteTextView
                     android:id="@+id/editTMP"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -169,7 +176,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/wmp"
                 android:id="@+id/wmla">
-                <EditText
+                <com.de.dmdk.view.InstantAutoCompleteTextView
                     android:id="@+id/editTMLA"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -183,7 +190,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/wmla"
                 android:id="@+id/wdist">
-                <AutoCompleteTextView
+                <com.de.dmdk.view.InstantAutoCompleteTextView
                     android:id="@+id/autoCompleteTVDistrict"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -195,7 +202,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/wdist"
                 android:id="@+id/wpanch">
-                <AutoCompleteTextView
+                <com.de.dmdk.view.InstantAutoCompleteTextView
                     android:id="@+id/autoCompleteTVPanchayat"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -224,7 +231,7 @@
                 android:id="@+id/wtown">
 
 
-            <AutoCompleteTextView
+            <com.de.dmdk.view.InstantAutoCompleteTextView
                 android:id="@+id/autoCompleteTVTownCity"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -255,12 +262,14 @@
             <Button
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Submit"
+                android:text="@string/submit"
                 android:backgroundTint="@color/colorBaggyGreen"
                 android:id="@+id/btnPreview"
                 android:layout_below="@+id/wdoj"
                 android:layout_marginTop="@dimen/idcard_field_vertical_margin"
                 android:layout_centerHorizontal="true" />
+
+
 
 
         </RelativeLayout>

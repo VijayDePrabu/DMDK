@@ -5,6 +5,7 @@
     <string name="clear_form">Clear form</string>
     <string name="options">Options</string>
     <string name="about">About app</string>
+    <string name="submit">Submit</string>
 
     <string name="fillup_header">Enter Member details</string>
 
@@ -33,7 +34,6 @@
     <string name="admin_login">Admin</string>
     <string name="admin_registeration">Admin Registeration</string>
     <string name="new_membership_entry">New Membersip Entry</string>
-
 
 
 </resources>

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item >
+        <shape android:shape="rectangle">
+
+            <padding android:left="@dimen/outer_yellow_border_thick"
+                android:top="@dimen/outer_yellow_border_thick"
+                android:right="@dimen/outer_yellow_border_thick"
+                android:bottom="@dimen/outer_yellow_border_thick"/>
+
+            <solid android:color="#ffffff"/>
+
+        </shape>
+    </item>
+    <item >
+        <shape android:shape="rectangle">
+
+            <padding android:left="@dimen/red_border_thick"
+                android:top="@dimen/red_border_thick"
+                android:right="@dimen/red_border_thick"
+                android:bottom="@dimen/red_border_thick"/>
+
+            <solid android:color="#ffffff"/>
+
+        </shape>
+    </item>
+    <item >
+        <shape android:shape="rectangle">
+
+            <padding android:left="@dimen/inner_yellow_border_thick"
+                android:top="@dimen/inner_yellow_border_thick"
+                android:right="@dimen/inner_yellow_border_thick"
+                android:bottom="@dimen/inner_yellow_border_thick"/>
+
+            <solid android:color="#ffffff"/>
+
+        </shape>
+    </item>
+    <item >
+        <shape android:shape="rectangle">
+
+            <padding android:left="@dimen/black_border_thick"
+                android:top="@dimen/black_border_thick"
+                android:right="@dimen/black_border_thick"
+                android:bottom="@dimen/black_border_thick"/>
+
+            <solid android:color="#ffffff"/>
+
+        </shape>
+    </item>
+
+    <item >
+        <shape android:shape="rectangle">
+
+
+            <solid android:color="#ffffff"/>
+
+        </shape>
+    </item>
+
+
+</layer-list>

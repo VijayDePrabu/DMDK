@@ -14,9 +14,7 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".MembershipEntryActivity"
-            android:screenOrientation="portrait">
-
-        </activity>
+            android:screenOrientation="portrait" />
 
         <!--
             <activity android:name="com.commonsware.cwac.cam2.CameraActivity"
@@ -45,10 +43,10 @@
         <activity android:name=".BaseActivity" />
         <activity android:name=".login.NewAdminRegisterationActivity" />
         <activity android:name=".MenuScreenActivity" />
-        <activity android:name=".membership.NewMembershipEntryActivity"></activity>
-        <activity android:name=".FirebaseTestActivity">
-   </activity>
-
+        <activity android:name=".membership.NewMembershipEntryActivity" />
+        <activity android:name=".FirebaseTestActivity" />
+        <activity android:name=".RecentMembershipsActivity" />
+        <activity android:name=".ReportsActivity"></activity>
     </application>
 
 </manifest>

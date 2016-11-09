@@ -2,7 +2,7 @@
 <resources>
     <string-array
         name="genderArray">
-        <item>Select Gender</item>
+        <item>பாலினத்தை தேர்வு</item>
         <item>ஆண்</item>
         <item>பெண்</item>
         <item>அருந்ததியர்</item>
