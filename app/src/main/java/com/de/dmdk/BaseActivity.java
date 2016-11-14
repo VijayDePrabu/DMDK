@@ -25,7 +25,8 @@ public class BaseActivity extends AppCompatActivity {
                         dialog.dismiss();
                     }
                 });
-        alertDialog.show();
+        if(!(isFinishing()))
+            alertDialog.show();
     }
 
     public void showAlertDialogWithClickListener(String message, DialogInterface.OnClickListener onClickListener, DialogInterface.OnClickListener onCancelClickListener) {
@@ -39,7 +40,8 @@ public class BaseActivity extends AppCompatActivity {
                     }
                 }*/);
         alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "CANCEL", onCancelClickListener);
-        alertDialog.show();
+        if(!(isFinishing()))
+            alertDialog.show();
     }
 
 
@@ -54,7 +56,8 @@ public class BaseActivity extends AppCompatActivity {
                     }
                 }*/);
         alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "CANCEL", onCancelClickListener);
-        alertDialog.show();
+        if(!(isFinishing()))
+            alertDialog.show();
     }
 
     ProgressDialog loading = null;
@@ -73,12 +76,14 @@ public class BaseActivity extends AppCompatActivity {
     }
 
     public void showProgress(String message) {
+        if(!(isFinishing()))
         getProgressDialog(message).show();
     }
 
     public void dismissProgress() {
-        getProgressDialog("").dismiss();
-        ;
+        if(!(isFinishing()))
+            getProgressDialog("").dismiss();
+
     }
 
 

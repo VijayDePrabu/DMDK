@@ -150,6 +150,7 @@ public class MembershipEntryActivity extends BaseActivity implements View.OnClic
     private MpMlaDistrict selectedMpMlaDistrict;
     private String tempDOB;
     private boolean isPushMemberData;
+    private DatabaseReference updateMemberRef;
 
 
     @Override
@@ -474,7 +475,7 @@ public class MembershipEntryActivity extends BaseActivity implements View.OnClic
             public void afterTextChanged(Editable s) {
                 if((!TextUtils.isEmpty(editTPhone.getText().toString().trim()) && (!TextUtils.isEmpty(s.toString())))  && (!s.toString().equalsIgnoreCase(tempDOB))){
                     tempDOB= s.toString();
-                    if((purpose != DMDKConstants.PURPOSE_UPDATE_RECORDS) && (purpose != DMDKConstants.PURPOSE_PRINT)) {
+                    if((purpose == DMDKConstants.PURPOSE_NEW_REGISTER)) {
                         verifyPhoneDOB();
                     }
                 }
@@ -534,7 +535,7 @@ public class MembershipEntryActivity extends BaseActivity implements View.OnClic
                 }else{
                  //   Toast.makeText(getApplicationContext(),"New Memeber ID created!!",Toast.LENGTH_SHORT).show();
                     if(isClearMenuAvailable) {
-                        editTMembershipId.setText("" + 10068 + (int) (Math.random() * ((10000 - 1068) + 1)));
+                        editTMembershipId.setText(""+getLastMemberID()+1);
                     }
                     isPushMemberData = true;
                     btnPreview.setEnabled(true);
@@ -798,11 +799,11 @@ public class MembershipEntryActivity extends BaseActivity implements View.OnClic
                 showStartDateDialog();
                 break;
             case R.id.btnPreview:
-                if((purpose != DMDKConstants.PURPOSE_UPDATE_RECORDS) && (purpose != DMDKConstants.PURPOSE_PRINT)) {
+                if ((purpose == DMDKConstants.PURPOSE_NEW_REGISTER)) {
                     verifyPhoneDOB();
                 }
 
-                if(selectedPanchayat==null){
+                if (selectedPanchayat == null) {
                     showAlertDialog("Panchayat/Town/City/District details manually typed. Tamil Translation not available!");
                 }
 
@@ -817,40 +818,49 @@ public class MembershipEntryActivity extends BaseActivity implements View.OnClic
                     setLocale("ta");
 
                     // storing to database
-                    if(isPushMemberData) {
-                        storingToDatabase();
+                    if (isPushMemberData) {
+                        if (purpose == DMDKConstants.PURPOSE_UPDATE_RECORDS) {
+                            storingToDatabase(true);
+                            return;
+                        } else if (purpose == DMDKConstants.PURPOSE_NEW_REGISTER) {
+                            {
+                                storingToDatabase(false);
+                            }
+
+                        }
+                        // end of storing to database
+
+                        idCardView = (View) findViewById(idCardLayout);
+                        idCardView.setVisibility(View.GONE);
+                        RelativeLayout layout = (RelativeLayout) findViewById(R.id.few);
+
+
+                        idCard = getIDCard();
+                        idCardRId = View.generateViewId();
+                        idCard.setId(idCardRId);
+                        layout.addView(idCard);
+                        imageVPhotoPrint.setImageDrawable(imageVPhoto.getDrawable());
+
+                        // clearing any focus
+                        View currentFocusedView = getCurrentFocus();
+                        if (currentFocusedView != null) currentFocusedView.clearFocus();
+                        if (mLinearLayout != null) {
+                            mLinearLayout.requestFocus();
+                        }
+
+                        hideKeyboard(this);
+
+                    } else {
+                        showAlertDialog("Some fields are missing!");
                     }
-                    // end of storing to database
-
-                    idCardView = (View) findViewById(idCardLayout);
-                    idCardView.setVisibility(View.GONE);
-                    RelativeLayout layout = (RelativeLayout) findViewById(R.id.few);
-
-
-                    idCard = getIDCard();
-                    idCardRId = View.generateViewId();
-                    idCard.setId(idCardRId);
-                    layout.addView(idCard);
-                    imageVPhotoPrint.setImageDrawable(imageVPhoto.getDrawable());
-
-                    // clearing any focus
-                    View currentFocusedView = getCurrentFocus();
-                    if (currentFocusedView != null) currentFocusedView.clearFocus();
-                    if (mLinearLayout != null) {
-                        mLinearLayout.requestFocus();
-                    }
-
-                    hideKeyboard(this);
-
-                }else{
-                   showAlertDialog("Some fields are missing!");
                 }
-                break;
+                    break;
+
 
         }
     }
 
-    private void storingToDatabase() {
+    private void storingToDatabase(boolean isUpdate) {
         MemberDatum memberDatum = new MemberDatum();
         memberDatum.setPhone(editTPhone.getText().toString());
         memberDatum.setDob(editTDOB.getText().toString());
@@ -861,7 +871,7 @@ public class MembershipEntryActivity extends BaseActivity implements View.OnClic
         if(spinGender.getSelectedItemPosition()>0) {
             memberDatum.setGender(genderArray[spinGender.getSelectedItemPosition()]);
         }else{
-            memberDatum.setGender("-");
+            memberDatum.setGender("---");
         }
         memberDatum.setVoterId(editTVoterId.getText().toString());
         if(selectedMpMlaDistrict!=null) {
@@ -895,8 +905,12 @@ public class MembershipEntryActivity extends BaseActivity implements View.OnClic
 
         memberDatum.setWard(editTWard.getText().toString());
         memberDatum.setDoj(editTDate.getText().toString());
+        if(isUpdate && updateMemberRef!=null){
+            updateMemberRef.removeValue();
+        }
 
         databaseMemberDataReference.push().setValue(memberDatum);
+
     }
 
     private boolean isAllFieldsFilled() {
@@ -1787,7 +1801,11 @@ public class MembershipEntryActivity extends BaseActivity implements View.OnClic
             public void onClick(DialogInterface dialog, int whichButton)
             {
                 if(!TextUtils.isEmpty(et1.getText())) {
-                    searchMember(et1.getText().toString().trim());
+                    String formatted = et1.getText().toString().trim();
+                    if (formatted.length()==1) {
+                        formatted = String.format("%02d", Integer.parseInt(et1.getText().toString().trim()));
+                    }
+                    searchMember(formatted);
                 }else{
                     showAlertDialog("Please enter memberid");
                 }
@@ -1800,7 +1818,7 @@ public class MembershipEntryActivity extends BaseActivity implements View.OnClic
                 finish();
             }
         });
-
+        if(!(isFinishing()))
         alert.show();
     }
 
@@ -1812,13 +1830,30 @@ public class MembershipEntryActivity extends BaseActivity implements View.OnClic
         queryRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                if(updateMemberRef!=null){
+                    showAlertDialogWithClickListener("Member " +  " updated!!!", new DialogInterface.OnClickListener(){
+
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            finish();
+                        }
+                    },new DialogInterface.OnClickListener(){
+
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            finish();
+
+                        }
+                    });
+                }
                 if(dataSnapshot.getValue() != null){
                     dismissProgress();
                     for(DataSnapshot childDataSnapshot:dataSnapshot.getChildren()){
                         MemberDatum memberDatum= childDataSnapshot.getValue(MemberDatum.class);
                         if(memberDatum.getMembershipId().equalsIgnoreCase(memberID)){
                             //  Toast.makeText(getApplicationContext(),memberDatum.getName()+" Member already found!!!",Toast.LENGTH_SHORT).show();
-                            showAlertDialog("Member "+memberDatum.getName()+" found!!!");
+                                showAlertDialog("Member " + memberDatum.getName() + " found!!!");
+
                             if(purpose == DMDKConstants.PURPOSE_UPDATE_RECORDS) {
                                 btnPreview.setText("Update");
                             }else if(purpose == DMDKConstants.PURPOSE_PRINT){
@@ -1827,7 +1862,7 @@ public class MembershipEntryActivity extends BaseActivity implements View.OnClic
                             btnPreview.setEnabled(true);
 
                             fillData(memberDatum);
-
+                            updateMemberRef= childDataSnapshot.getRef();
                             isPushMemberData = true;
                             return;
                         }else{
@@ -1841,6 +1876,11 @@ public class MembershipEntryActivity extends BaseActivity implements View.OnClic
                                 }                                btnPreview.setEnabled(false);
                             }
                             isPushMemberData = false;
+                            if(purpose == DMDKConstants.PURPOSE_UPDATE_RECORDS) {
+                                showDialogs("Update Member Record","Enter the MemberID");
+                            }else if(purpose == DMDKConstants.PURPOSE_PRINT) {
+                                showDialogs("Print","Enter the MemberID");
+                            }
                             return;
                         }
                     }
@@ -1856,6 +1896,11 @@ public class MembershipEntryActivity extends BaseActivity implements View.OnClic
                         }                        btnPreview.setEnabled(false);
                     }
                     isPushMemberData = false;
+                    if(purpose == DMDKConstants.PURPOSE_UPDATE_RECORDS) {
+                        showDialogs("Update Member Record","Enter the MemberID");
+                    }else if(purpose == DMDKConstants.PURPOSE_PRINT) {
+                        showDialogs("Print","Enter the MemberID");
+                    }
                     return;
 
                 }
@@ -1864,6 +1909,7 @@ public class MembershipEntryActivity extends BaseActivity implements View.OnClic
             @Override
             public void onCancelled(DatabaseError databaseError) {
                 dismissProgress();
+
 
             }
         });
@@ -1882,6 +1928,38 @@ public class MembershipEntryActivity extends BaseActivity implements View.OnClic
         autoCompleteTVEntryFormPanchayat.setText(memberDatum.getPanchayat());
         autoCompleteTVTownCity.setText(memberDatum.getTownCity());
         editTDate.setText(memberDatum.getDoj());
+    }
+
+    int lastMemberId;
+
+    private int getLastMemberID() {
+        showProgress("");
+        Query queryRef = databaseMemberDataReference.orderByChild("membershipId").limitToLast(1)/*.orderByChild("dob")*/;
+        queryRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if(dataSnapshot.getValue() != null){
+                    dismissProgress();
+                    for(DataSnapshot childDataSnapshot:dataSnapshot.getChildren()){
+                        MemberDatum memberDatum= childDataSnapshot.getValue(MemberDatum.class);
+                        lastMemberId= Integer.parseInt(memberDatum.getMembershipId().trim());
+                    }
+
+                }else{
+                    dismissProgress();
+
+                    return;
+
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                dismissProgress();
+
+            }
+        });
+        return  lastMemberId;
     }
 
 
