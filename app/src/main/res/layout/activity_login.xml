@@ -31,6 +31,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textVisiblePassword"
+                android:text="9962073739"
                 android:hint="Phone"/>
         </android.support.design.widget.TextInputLayout>
 
@@ -44,6 +45,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textPassword"
+                android:text="arun123"
                 android:hint="Password"/>
         </android.support.design.widget.TextInputLayout>
 

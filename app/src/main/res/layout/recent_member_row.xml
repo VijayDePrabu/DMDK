@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="20dp">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Member ID"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:id="@+id/textVMemberIDLabel" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Name"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:id="@+id/textVNameLabel" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="DOJ"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:id="@+id/textVDoj" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Gender"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:id="@+id/textVGender" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Father/Husband"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:id="@+id/textVHusbandName" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="District"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:id="@+id/textVDistrict" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="DOB"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:id="@+id/textVDob" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="MLA"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:id="@+id/textVMla" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="MP"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:id="@+id/textVMp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Panchayat"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:id="@+id/textVPanchayat" />
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Phone"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:id="@+id/textVPhone" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Town/City"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:id="@+id/textVTownCity" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Voter Id"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:id="@+id/textVVoterID" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Ward"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:id="@+id/textVWard" />
+
+</LinearLayout>
